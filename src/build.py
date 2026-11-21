@@ -264,7 +264,7 @@ home = f'''
         <div><strong>Trevor Lan, Riley Snow, &amp; Corson Schweizer</strong><span>Founders, Carolina Sports Consulting Group</span></div>
       </div>
     </div>
-    <div class="photo sticky" style="aspect-ratio:4/5"><img src="{IMG['founders']}" alt="CSCG Founders: Trevor Lan, Riley Snow, and Corson Schweizer" loading="lazy"></div>
+    <div class="photo sticky"><img src="{IMG['founders']}" alt="CSCG Founders: Trevor Lan, Riley Snow, and Corson Schweizer" loading="lazy"></div>
   </div>
 </section>
 
