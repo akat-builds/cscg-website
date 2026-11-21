@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "",
+  "buildCommand": "python3 src/build.py || echo 'python3 unavailable, using committed dist/'",
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "trailingSlash": true
+}
