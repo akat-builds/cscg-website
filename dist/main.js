@@ -1,4 +1,5 @@
 (() => {
+  document.documentElement.classList.add('js');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Header: switch to the light pill once the dark hero has scrolled away
@@ -158,6 +159,39 @@
     img.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) show(i + (dx < 0 ? 1 : -1)); x0 = null; });
     show(0);
   }
+
+  // Scroll reveal with stagger for cards in the same group
+  const revealSel = '.h-section, .lede, .stat, .mission-card, .tab-panels, .tablist, .person, .advisor, .logo-tile, .service, .step, .steps, .case-card, .viewer, .photo, .faq details, .form-card, .social-link, .team-tab, .cta-band, .why, .letter p, .signature';
+  const els = [...document.querySelectorAll(revealSel)].filter(el => !el.closest('.hero, .page-hero, .site-header, .mobile-menu'));
+  els.forEach(el => {
+    el.setAttribute('data-reveal', '');
+    const sibs = [...el.parentElement.children].filter(c => c.matches(revealSel));
+    const idx = sibs.indexOf(el);
+    el.style.setProperty('--d', Math.min(idx, 8) * 70 + 'ms');
+  });
+  if (reduce || !('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('in'));
+  } else {
+    const rio = new IntersectionObserver(es => es.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.add('in'); rio.unobserve(en.target); }
+    }), { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(el => rio.observe(el));
+    // re-observe cards inside project-team panels when a tab is switched in
+    document.querySelectorAll('.team-tab').forEach(t => t.addEventListener('click', () => {
+      document.querySelectorAll('.team-panel:not([hidden]) [data-reveal]:not(.in)').forEach(el => rio.observe(el));
+    }));
+  }
+
+  // Cursor-following glow
+  const glowSel = '.service, .step, .mission-card, .advisor, .case-card, .stat, .form-card, .team-tab, .person';
+  document.querySelectorAll(glowSel).forEach(card => {
+    card.classList.add('glow');
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
 
   // Contact form (not connected yet)
   const form = document.querySelector('[data-contact]');
